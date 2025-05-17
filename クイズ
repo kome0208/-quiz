@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+
+typedef struct {
+    char *question;
+    char *answer;
+    int used;
+} Quiz;
+
+int main() {
+    srand(time(NULL));
+
+    Quiz quiz_list[30] = {
+        {"水の化学式は？", "H2O", 0},
+        {"ホウ素の元素記号は？","B",0},
+        {"昔は太陽系とされていたが、惑星ではないと判明した星は？","冥王星",0},
+        {"今のコンピュータの仕組みを作った科学者の名前は？","ノイマン",0},
+        {"計算機や自分の名を関した風力を表す数値を作った科学者であり、思想家は？","パスカル",0},
+        {"虹の内側にある不可視光線は？","赤外線",0},
+        {"酸素の元素記号は？", "O", 0},
+        {"哺乳類の心臓の部屋は何つある？", "4", 0},
+        {"水は何度で氷になる？", "0", 0},
+        {"一番地球に近い恒星は何？", "太陽", 0},
+        {"盛岡が県庁所在地の県は？（県名だけ回答）","岩手",0},
+        {"兼六園はどこの市にある？（市名だけ回答）","金沢",0},
+        {"岩手にある日本三景は？","松島",0},
+        {"イタリアの首都は？", "ローマ", 0},
+        {"スペインの首都は？", "マドリード", 0},
+        {"一番最近（2025,5/13時点）に国として認定されたのは？","南スーダン",0},
+        {"サントリーニ島はどこの国？","ギリシャ",0},
+        {"アメリカ合衆国の首都は？","ワシントンD.C.",0},
+        {"エッフェル塔がある都市は？（市名だけ回答）","パリ",0},
+        {"ナイアガラの滝がある国は？（国名だけ回答）","カナダ",0},
+        {"聖徳太子が建立したとされる木造の有名な寺院は？","法隆寺",0},
+        {"源頼朝が開いた幕府はどこにあった？（地名だけ回答）","鎌倉",0},
+        {"織田信長が本能寺で討たれたのは何年？（西暦で回答）","1582",0},
+        {"明治維新後に発布された日本の最初の憲法は？","大日本帝国憲法",0},
+        {"黒船を率いて浦賀に来航したアメリカ人は？（フルネーム）","ペリー",0},
+        {"坂本龍馬が結成に関わった海援隊の本拠地は？（都市名だけ回答）","長崎",0},
+        {"日本で最初に元号が使われた時代は？（時代名だけ回答）","飛鳥時代",0},
+        {"関ヶ原の戦いで勝利した武将は？（フルネーム）","徳川家康",0},
+        {"明治時代に制定された学制によって整備されたものは？（一語で）","学校",0},
+        {"第一次世界大戦後に日本が加盟した国際組織は？（正式名称で回答）","国際連盟",0}
+    };
+
+    printf("クイズ！\n");
+    printf("科目を選択してください\n");
+    printf("0.理科　1.地理　2.日本史　3.ランダム\n");
+
+    int a;
+    scanf("%d", &a);
+
+    getchar();
+
+    int start = 0, end = 29;
+
+    if (a == 0) { start = 0; end = 9; }
+    else if (a == 1) { start = 10; end = 19; }
+    else if (a == 2) { start = 20; end = 29; }
+    else if (a == 3) { start = 0; end = 29; }
+    else {
+        printf("無効な選択です。\n");
+        return 1;
+    }
+
+    int remaining = 0;
+    for (int i = start; i <= end; i++) {
+        if (quiz_list[i].question != NULL) remaining++;
+    }
+
+    while (remaining > 0) {
+        int index = start + rand() % (end - start + 1);
+
+        if (quiz_list[index].used || quiz_list[index].question == NULL)
+            continue;
+
+        printf("Q: %s\n", quiz_list[index].question);
+
+        char user_answer[100];
+        printf("あなたの答え: ");
+        fgets(user_answer, sizeof(user_answer), stdin);
+        user_answer[strcspn(user_answer, "\n")] = 0;
+  if (strcmp(user_answer, quiz_list[index].answer) == 0) {
+            printf("正解！\n");
+        } else {
+            printf("不正解！正しい答えは「%s」です。\n", quiz_list[index].answer);
+        }
+
+        quiz_list[index].used = 1;
+        remaining--;
+    }
+
+    printf("すべての問題を出題しました！\n");
+    return 0;
+}
